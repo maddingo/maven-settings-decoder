@@ -48,6 +48,14 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>Github Packages</name>
+            <url>https://maven.pkg.github.com/maddingo/maven-settings-decoder</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -76,16 +84,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>github</id>
-            <distributionManagement>
-                <repository>
-                    <id>github</id>
-                    <name>Github Packages</name>
-                    <url>https://maven.pkg.github.com/maddingo/maven-settings-decoder</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
 </project>
