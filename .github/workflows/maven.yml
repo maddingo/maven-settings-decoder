@@ -26,14 +26,14 @@ jobs:
         os: [macos-latest, windows-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v3
-    # - name: Set up Java and Maven
-    #   uses: actions/setup-java@v3
-    #   with:
-    #     java-version: '17'
-    #     distribution: 'temurin'
-    #     server-id: 'github'
-    #     settings-path: ${{ github.workspace }}
-    #     cache: 'maven'
+    - name: Set up Java and Maven
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        server-id: 'github'
+        settings-path: ${{ github.workspace }}
+        cache: 'maven'
     - name: Setup GraalVM
       uses: graalvm/setup-graalvm@v1
       with:
