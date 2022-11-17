@@ -136,6 +136,7 @@
                                     <option>experimental-class-loader-support</option>
                                 </options>
                             </agent>
+                            <executable>${project.build.directory}/${project.artifactId}-${image.os}</executable>
                         </configuration>
                     </plugin>
                 </plugins>

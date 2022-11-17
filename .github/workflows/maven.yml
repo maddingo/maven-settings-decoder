@@ -20,10 +20,10 @@ permissions:
 jobs:
   build:
     name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos, windows, ubuntu]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Java and Maven
@@ -43,13 +43,14 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         native-image-job-reports: 'true'
         set-java-home: 'false'
+        cache: 'maven'
     - name: Build with Maven
       if: github.ref != 'refs/heads/master'
-      run: mvn clean -B verify -s ${{ github.workspace }}/settings.xml
+      run: mvn clean -B verify -Pnative -Dimage.os=${{ matrix.os }} -s ${{ github.workspace }}/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: Upload binary
       uses: actions/upload-artifact@v2
       with:
         name: maven-settings-decoder-${{ matrix.os }}
-        path: target/maven-settings-decoder*
+        path: target/maven-settings-decoder-${{ matrix.os }}
