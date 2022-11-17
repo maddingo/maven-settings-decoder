@@ -46,7 +46,7 @@ jobs:
         cache: 'maven'
     - name: Build with Maven
       if: github.ref != 'refs/heads/master'
-      run: mvn clean -B verify -Pnative -Dimage.os=${{ matrix.os }} -s ${{ github.workspace }}/settings.xml
+      run: mvn clean -B verify -Pnative -Dimage_os=${{ matrix.os }} -s ${{ github.workspace }}/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: Upload binary
