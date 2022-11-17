@@ -45,11 +45,11 @@ jobs:
         set-java-home: 'false'
     - name: Build with Maven
       if: github.ref != 'refs/heads/master'
-      run: mvn clean -B verify -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn clean -B verify -s ${{ github.workspace }}/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: Upload binary
       uses: actions/upload-artifact@v2
       with:
         name: maven-settings-decoder-${{ matrix.os }}
-        path: target/maven-settings-decoder
+        path: target/maven-settings-decoder*
