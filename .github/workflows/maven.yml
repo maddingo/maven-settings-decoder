@@ -1,25 +1,36 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
-name: Build and deploy
+name: Build and Upload Binaries
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [ "feature/native-build" ]
+#  pull_request:
+#    branches: [ "master" ]
 
 permissions:
   contents: read
   packages: write
 
 jobs:
+  create_release:
+    name: Create release
+    runs-on: ubuntu-latest
+    # Note this. We are going to use that in further jobs.
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: true
   build:
     name: Build on ${{ matrix.os }}
+    needs: create_release
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
@@ -45,12 +56,15 @@ jobs:
         set-java-home: 'false'
         cache: 'maven'
     - name: Build with Maven
-      if: github.ref != 'refs/heads/master'
       run: mvn clean -B verify -Pnative -Dimage_os=${{ matrix.os }} -s ${{ github.workspace }}/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
-    - name: Upload binary
-      uses: actions/upload-artifact@v2
-      with:
-        name: maven-settings-decoder-${{ matrix.os }}
-        path: target/maven-settings-decoder-${{ matrix.os }}${{ matrix.os == 'windows' && '.exe' || '' }}
+    - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_name: maven-settings-decoder-${{ matrix.os }}
+          asset_path: target/maven-settings-decoder-${{ matrix.os }}${{ matrix.os == 'windows' && '.exe' || '' }}
+          asset_content_type: application/octet-stream
