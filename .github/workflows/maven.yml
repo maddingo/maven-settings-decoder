@@ -60,11 +60,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: Upload release assets
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_name: maven-settings-decoder-${{ matrix.os }}
-          asset_path: target/maven-settings-decoder-${{ matrix.os }}${{ matrix.os == 'windows' && '.exe' || '' }}
-          asset_content_type: application/octet-stream
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        asset_name: maven-settings-decoder-${{ matrix.os }}
+        asset_path: target/maven-settings-decoder-${{ matrix.os }}${{ matrix.os == 'windows' && '.exe' || '' }}
+        asset_content_type: application/octet-stream
