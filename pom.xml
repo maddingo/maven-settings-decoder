@@ -138,7 +138,7 @@
                                     <option>experimental-class-loader-support</option>
                                 </options>
                             </agent>
-                            <imageName>${project.artifactId}-${image.os}</executable>
+                            <imageName>${project.artifactId}-${image.os}</imageName>
                         </configuration>
                     </plugin>
                 </plugins>
